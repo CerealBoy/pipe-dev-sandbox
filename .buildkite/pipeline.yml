@@ -1,0 +1,9 @@
+steps:
+  - label: ":buildkite:"
+    key: init
+    command: "echo Hi there"
+
+  - label: ":golang:"
+    key: go
+    depends_on: init
+    command: "echo Run some Go things here maybe one day"
