@@ -7,3 +7,8 @@ steps:
     key: go
     depends_on: init
     command: "echo Run some Go things here maybe one day"
+
+  - label: ":linux:"
+    key: linux
+    depends_on: init
+    command: "echo Another step because why not"
