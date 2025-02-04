@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+# There could easily be things we want to take care of after the command finishes
+echo "Clean-up from the command..."

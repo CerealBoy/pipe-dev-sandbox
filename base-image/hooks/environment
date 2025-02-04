@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+# This is where any additional steps for environment setup will happen
+echo "Some additional ENV setup below..."

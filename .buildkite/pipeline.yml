@@ -3,12 +3,17 @@ steps:
     key: init
     command: "echo Hi there"
 
-  - label: ":golang:"
-    key: go
-    depends_on: init
-    command: "echo Run some Go things here maybe one day"
-
-  - label: ":linux:"
-    key: linux
-    depends_on: init
-    command: "echo Another step because why not"
+  - label: ":docker: Build and push image"
+    key: base-image
+    command: |
+      buildkite-agent oidc request-token \
+        --audience "https://packages.buildkite.com/${BUILDKITE_ORGANIZATION_SLUG}/test-hosted-cr" \
+        --lifetime 300 \
+      | docker login "packages.buildkite.com/${BUILDKITE_ORGANIZATION_SLUG}/test-hosted-cr" \
+        --username buildkite \
+        --password-stdin
+      docker buildx \
+        --push \
+        -t packages.buildkite.com/${BUILDKITE_ORGANIZATION_SLUG}/test-hosted-cr/${BUILDKITE_PIPELINE_NAME}/base-image:latest \
+        -f ./base-image/Dockerfile \
+        ./base-image/
