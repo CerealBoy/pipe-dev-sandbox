@@ -12,7 +12,7 @@ steps:
       | docker login "packages.buildkite.com/${BUILDKITE_ORGANIZATION_SLUG}/test-hosted-cr" \
         --username buildkite \
         --password-stdin
-      docker buildx \
+      docker buildx build \
         --push \
         -t packages.buildkite.com/${BUILDKITE_ORGANIZATION_SLUG}/test-hosted-cr/${BUILDKITE_PIPELINE_NAME}/base-image:latest \
         -f ./base-image/Dockerfile \
