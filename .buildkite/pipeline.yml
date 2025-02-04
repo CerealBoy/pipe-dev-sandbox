@@ -14,6 +14,6 @@ steps:
         --password-stdin
       docker buildx build \
         --push \
-        -t packages.buildkite.com/${BUILDKITE_ORGANIZATION_SLUG}/test-hosted-cr/${BUILDKITE_PIPELINE_NAME}/base-image:latest \
+        -t packages.buildkite.com/${BUILDKITE_ORGANIZATION_SLUG}/test-hosted-cr/${BUILDKITE_PIPELINE_NAME}:latest \
         -f ./base-image/Dockerfile \
         ./base-image/
