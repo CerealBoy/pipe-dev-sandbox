@@ -8,32 +8,37 @@ steps:
     depends_on: init
     command: |
       buildkite-agent oidc request-token \
-        --audience "https://packages.buildkite.com/${BUILDKITE_ORGANIZATION_SLUG}/test-hosted-cr" \
+        --audience "https://packages.buildkite.com/${BUILDKITE_ORGANIZATION_SLUG}/hosted" \
         --lifetime 300 \
-      | docker login "packages.buildkite.com/${BUILDKITE_ORGANIZATION_SLUG}/test-hosted-cr" \
+      | docker login "packages.buildkite.com/${BUILDKITE_ORGANIZATION_SLUG}/hosted" \
         --username buildkite \
         --password-stdin
       docker buildx build \
         --push \
         --platform linux/amd64,linux/arm64 \
-        -t packages.buildkite.com/${BUILDKITE_ORGANIZATION_SLUG}/test-hosted-cr/${BUILDKITE_PIPELINE_NAME}:latest \
+        -t packages.buildkite.com/${BUILDKITE_ORGANIZATION_SLUG}/hosted/${BUILDKITE_PIPELINE_NAME}:latest \
         -f ./base-image/Dockerfile \
         ./base-image/
+    notify:
+      - github_check:
+          output:
+            title: "Standard default build --push completed"
+            text: "The build --push that ran with the buildx config pre-provided has completed!"
 
   - label: ":docker: Non-x"
     key: non-x
     depends_on: init
     command: |
       buildkite-agent oidc request-token \
-        --audience "https://packages.buildkite.com/${BUILDKITE_ORGANIZATION_SLUG}/test-hosted-cr" \
+        --audience "https://packages.buildkite.com/${BUILDKITE_ORGANIZATION_SLUG}/hosted" \
         --lifetime 300 \
-      | docker login "packages.buildkite.com/${BUILDKITE_ORGANIZATION_SLUG}/test-hosted-cr" \
+      | docker login "packages.buildkite.com/${BUILDKITE_ORGANIZATION_SLUG}/hosted" \
         --username buildkite \
         --password-stdin
       docker build \
         --push \
         --progress plain \
         --platform linux/amd64,linux/arm64 \
-        -t packages.buildkite.com/${BUILDKITE_ORGANIZATION_SLUG}/test-hosted-cr/${BUILDKITE_PIPELINE_NAME}:non-x \
+        -t packages.buildkite.com/${BUILDKITE_ORGANIZATION_SLUG}/hosted/${BUILDKITE_PIPELINE_NAME}:non-x \
         -f ./base-image/Dockerfile \
         ./base-image/
