@@ -3,12 +3,36 @@ steps:
     key: init
     command: "echo Hi there"
 
-  - label: ":golang:"
-    key: go
+  - label: ":docker: Build and push image"
+    key: base-image
     depends_on: init
-    command: "echo Run some Go things here maybe one day"
+    command: |
+      buildkite-agent oidc request-token \
+        --audience "https://packages.buildkite.com/${BUILDKITE_ORGANIZATION_SLUG}/test-hosted-cr" \
+        --lifetime 300 \
+      | docker login "packages.buildkite.com/${BUILDKITE_ORGANIZATION_SLUG}/test-hosted-cr" \
+        --username buildkite \
+        --password-stdin
+      docker buildx build \
+        --push \
+        -t packages.buildkite.com/${BUILDKITE_ORGANIZATION_SLUG}/test-hosted-cr/${BUILDKITE_PIPELINE_NAME}:latest \
+        -f ./base-image/Dockerfile \
+        ./base-image/
 
-  - label: ":linux:"
-    key: linux
+  - label: ":docker: Non-x"
+    key: non-x
     depends_on: init
-    command: "echo Another step because why not"
+    command: |
+      buildkite-agent oidc request-token \
+        --audience "https://packages.buildkite.com/${BUILDKITE_ORGANIZATION_SLUG}/test-hosted-cr" \
+        --lifetime 300 \
+      | docker login "packages.buildkite.com/${BUILDKITE_ORGANIZATION_SLUG}/test-hosted-cr" \
+        --username buildkite \
+        --password-stdin
+      docker build \
+        --push \
+        --progress plain \
+        --platform linux/amd64,linux/arm64 \
+        -t packages.buildkite.com/${BUILDKITE_ORGANIZATION_SLUG}/test-hosted-cr/${BUILDKITE_PIPELINE_NAME}:non-x \
+        -f ./base-image/Dockerfile \
+        ./base-image/
