@@ -11,4 +11,8 @@ steps:
   - label: ":linux:"
     key: linux
     depends_on: init
-    command: "echo Another step because why not"
+    command: |
+      echo Another step because why not
+      uname -a
+      whoami
+      id
