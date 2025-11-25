@@ -1,12 +1,9 @@
 agents:
   queue: "default"
 
-image: "${BUILDKITE_HOSTED_REGISTRY_URL}/base:latest"
-
 steps:
   - label: ":docker: image build"
     key: build
-    image: ~
     if_changed:
       - ".buildkite/pipeline.yml"
       - ".buildkite/Dockerfile.build"
@@ -23,6 +20,7 @@ steps:
   - label: ":pipeline: With tilde"
     depends_on: build
     key: run
+    image: "${BUILDKITE_HOSTED_REGISTRY_URL}/base:latest"
     command: |
       echo "Running in the job now..."
       buildkite-agent --version
