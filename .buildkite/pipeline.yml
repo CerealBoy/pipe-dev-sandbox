@@ -1,15 +1,12 @@
 agents:
   queue: "default"
 
-image: "${BUILDKITE_HOSTED_REGISTRY_URL}/base:latest"
-
 steps:
   - label: ":docker: image build"
     key: build
     if_changed:
       - ".buildkite/pipeline.yml"
       - ".buildkite/Dockerfile.build"
-    image: ~
     command: |
       uname -a
       docker buildx build \
