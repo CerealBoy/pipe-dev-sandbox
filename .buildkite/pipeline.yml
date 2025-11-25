@@ -6,7 +6,7 @@ image: "${BUILDKITE_HOSTED_REGISTRY_URL}/base:latest"
 steps:
   - label: ":docker: image build"
     key: build
-    image: ~
+    image: ""
     if_changed:
       - ".buildkite/pipeline.yml"
       - ".buildkite/Dockerfile.build"
@@ -23,7 +23,7 @@ steps:
 
   - label: ":docker: image build alt"
     key: build_alt
-    image: ~
+    image: ""
     if_changed:
       - ".buildkite/pipeline.yml"
       - ".buildkite/Dockerfile.alt"
