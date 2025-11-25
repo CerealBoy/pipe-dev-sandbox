@@ -1,14 +1,30 @@
+agents:
+  queue: "default"
+
+image: "${BUILDKITE_HOSTED_REGISTRY_URL}/base:latest"
+
 steps:
-  - label: ":buildkite:"
-    key: init
-    command: "echo Hi there"
+  - label: ":docker: image build"
+    key: build
+    if_changed:
+      - ".buildkite/pipeline.yml"
+      - ".buildkite/Dockerfile.build"
+    image: ~
+    command: |
+      uname -a
+      docker buildx build \
+        --file .buildkite/Dockerfile.build \
+        --build-arg BUILDKITE_BUILD_NUMBER="$$BUILDKITE_BUILD_NUMBER" \
+        --platform linux/amd64 \
+        --tag "${BUILDKITE_HOSTED_REGISTRY_URL}/base:latest" \
+        --progress plain \
+        --push .
 
-  - label: ":golang:"
-    key: go
-    depends_on: init
-    command: "echo Run some Go things here maybe one day"
-
-  - label: ":linux:"
-    key: linux
-    depends_on: init
-    command: "echo Another step because why not"
+  - label: ":pipeline: With tilde"
+    depends_on: build
+    key: run
+    image: "${BUILDKITE_HOSTED_REGISTRY_URL}/base:latest"
+    command: |
+      echo "Running in the job now..."
+      buildkite-agent --version
+      uname -a
