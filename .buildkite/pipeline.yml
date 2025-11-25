@@ -1,14 +1,18 @@
 agents:
   queue: "default"
 
+image: "${BUILDKITE_HOSTED_REGISTRY_URL}/base:latest"
+
 steps:
   - label: ":docker: image build"
     key: build
+    image: ~
     if_changed:
       - ".buildkite/pipeline.yml"
       - ".buildkite/Dockerfile.build"
     command: |
       uname -a
+      echo "$${AL_OS:-unfound}"
       docker buildx build \
         --file .buildkite/Dockerfile.build \
         --build-arg BUILDKITE_BUILD_NUMBER="$$BUILDKITE_BUILD_NUMBER" \
@@ -19,11 +23,13 @@ steps:
 
   - label: ":docker: image build alt"
     key: build_alt
+    image: ~
     if_changed:
       - ".buildkite/pipeline.yml"
       - ".buildkite/Dockerfile.alt"
     command: |
       uname -a
+      echo "$${AL_OS:-unfound}"
       docker buildx build \
         --file .buildkite/Dockerfile.alt \
         --build-arg BUILDKITE_BUILD_NUMBER="$$BUILDKITE_BUILD_NUMBER" \
