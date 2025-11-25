@@ -17,7 +17,22 @@ steps:
         --progress plain \
         --push .
 
-  - label: ":pipeline: With tilde"
+  - label: ":docker: image build alt"
+    key: build_alt
+    if_changed:
+      - ".buildkite/pipeline.yml"
+      - ".buildkite/Dockerfile.alt"
+    command: |
+      uname -a
+      docker buildx build \
+        --file .buildkite/Dockerfile.alt \
+        --build-arg BUILDKITE_BUILD_NUMBER="$$BUILDKITE_BUILD_NUMBER" \
+        --platform linux/amd64 \
+        --tag "${BUILDKITE_HOSTED_REGISTRY_URL}/base:alternate" \
+        --progress plain \
+        --push .
+
+  - label: ":pipeline: with"
     depends_on: build
     key: run
     image: "${BUILDKITE_HOSTED_REGISTRY_URL}/base:latest"
@@ -25,3 +40,14 @@ steps:
       echo "Running in the job now..."
       buildkite-agent --version
       uname -a
+      echo "$$AL_OS"
+
+  - label: ":pipeline: with alt"
+    depends_on: build_alt
+    key: run_alt
+    image: "${BUILDKITE_HOSTED_REGISTRY_URL}/base:alternate"
+    command: |
+      echo "Running in the job now..."
+      buildkite-agent --version
+      uname -a
+      echo "$$AL_OS"

@@ -1,0 +1,6 @@
+FROM alpine:3.22
+
+ENV AL_OS="alpine"
+
+RUN apk update && \
+  apk add curl ca-certificates git bash
