@@ -1,14 +1,9 @@
 steps:
-  - label: ":buildkite:"
-    key: init
-    command: "echo Hi there"
-
-  - label: ":golang:"
-    key: go
-    depends_on: init
-    command: "echo Run some Go things here maybe one day"
-
-  - label: ":linux:"
-    key: linux
-    depends_on: init
-    command: "echo Another step because why not"
+  - label: "Artifact MIME type bug test"
+    commands: |
+      echo 'UTF-8 café, naïve, 日本語' > file-no-content-type.log
+      echo 'UTF-8 café, naïve, 日本語' > file-content-type-set.log
+      echo "Uploading file-no-content-type.log without --content-type"
+      buildkite-agent artifact upload file-no-content-type.log
+      echo "Uploading file-content-type-set.log with --content-type 'text/plain;charset=utf-8'"
+      buildkite-agent artifact upload file-content-type-set.log --content-type "text/plain;charset=utf-8"
