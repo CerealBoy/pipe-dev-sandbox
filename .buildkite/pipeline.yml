@@ -3,12 +3,18 @@ steps:
     key: init
     command: "echo Hi there"
 
-  - label: ":golang:"
-    key: go
+  - label: ":linux: registry/base:latest"
+    key: registry
     depends_on: init
-    command: "echo Run some Go things here maybe one day"
+    image: "${BUILDKITE_HOSTED_REGISTRY_URL}/base:latest"
+    command: |
+      echo "Hello, world!"
+      uname -a
 
-  - label: ":linux:"
-    key: linux
+  - label: ":linux: ubuntu:26.04"
+    key: ubuntu
     depends_on: init
-    command: "echo Another step because why not"
+    image: "ubuntu:26.04"
+    command: |
+      echo "Hello, world!"
+      uname -a
