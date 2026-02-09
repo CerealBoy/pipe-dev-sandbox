@@ -5,5 +5,7 @@ steps:
       brew install orbstack
       which orbctl || echo "No orbctl found"
       which docker || echo "No docker found"
+      orb
+      docker pull ubuntu:26.04
     agents:
       queue: mac
