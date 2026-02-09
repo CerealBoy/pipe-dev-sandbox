@@ -1,14 +1,9 @@
 steps:
-  - label: ":buildkite:"
+  - label: ":buildkite: :macos:"
     key: init
-    command: "echo Hi there"
-
-  - label: ":golang:"
-    key: go
-    depends_on: init
-    command: "echo Run some Go things here maybe one day"
-
-  - label: ":linux:"
-    key: linux
-    depends_on: init
-    command: "echo Another step because why not"
+    command: |
+      brew install orbstack
+      which orbctl || echo "No orbctl found"
+      which docker || echo "No docker found"
+    agents:
+      queue: mac
