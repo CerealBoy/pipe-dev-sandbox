@@ -2,13 +2,8 @@ steps:
   - label: ":buildkite:"
     key: init
     command: "echo Hi there"
-
-  - label: ":golang:"
-    key: go
-    depends_on: init
-    command: "echo Run some Go things here maybe one day"
-
-  - label: ":linux:"
-    key: linux
-    depends_on: init
-    command: "echo Another step because why not"
+    cache:
+      paths:
+        - ".cache"
+      size: 20g
+      name: "testing-volume"
