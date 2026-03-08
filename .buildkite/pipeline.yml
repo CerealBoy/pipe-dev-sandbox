@@ -1,7 +1,12 @@
 steps:
   - label: ":buildkite:"
     key: init
-    command: "echo Hi there"
+    command: |
+      ls -la
+      ls -la .cache || true
+      mkdir -p .cache
+      ls -la .cache || true
+      ls -la
     cache:
       paths:
         - ".cache"
