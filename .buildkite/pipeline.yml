@@ -1,5 +1,7 @@
 steps:
   - label: ":buildkite:"
+    env:
+      EXTRA_BIT: "volume;hello=world"
     key: init
     command: |
       ls -la
@@ -11,4 +13,4 @@ steps:
       paths:
         - ".cache"
       size: 20g
-      name: "testing-volume;hello=world"
+      name: "testing-${EXTRA_BIT}"
