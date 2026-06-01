@@ -11,4 +11,4 @@ steps:
       paths:
         - ".cache"
       size: 20g
-      name: "testing-volume"
+      name: "testing-volume;hello=world"
